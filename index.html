@@ -2054,30 +2054,43 @@ function initPushNotification() {
   if (!('serviceWorker' in navigator) || !('Notification' in window)) return;
 
   const btn = document.createElement('button');
-  btn.textContent = '🔔 업데이트 알림 받기';
   btn.style.cssText = 'position:fixed;bottom:20px;right:20px;z-index:9999;background:#1e3a5f;color:#fff;border:none;padding:12px 18px;border-radius:24px;font-size:13px;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,.2);cursor:pointer;font-family:inherit;';
 
-  if (Notification.permission === 'granted') {
-    btn.style.display = 'none';
+  function fetchAndShowToken() {
+    try {
+      if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+      const messaging = firebase.messaging();
+      messaging.getToken({ vapidKey: VAPID_KEY }).then((token) => {
+        console.log('[FCM] 토큰 발급 완료:', token);
+        showTokenBox(token);
+      }).catch((err) => {
+        console.error('[FCM] 토큰 발급 실패:', err);
+        alert('토큰 발급에 실패했습니다: ' + err.message);
+      });
+    } catch (e) {
+      console.error('[FCM] 초기화 오류:', e);
+    }
   }
 
-  btn.onclick = () => {
-    Notification.requestPermission().then((permission) => {
-      if (permission === 'granted') {
-        try {
-          firebase.initializeApp(firebaseConfig);
-          const messaging = firebase.messaging();
-          messaging.getToken({ vapidKey: VAPID_KEY }).then((token) => {
-            console.log('[FCM] 토큰 발급 완료:', token);
-            showTokenBox(token);
-            btn.style.display = 'none';
-          }).catch((err) => console.error('[FCM] 토큰 발급 실패:', err));
-        } catch (e) {
-          console.error('[FCM] 초기화 오류:', e);
+  if (Notification.permission === 'granted') {
+    // 이미 허용된 상태 -> 버튼을 "토큰 확인"용으로 표시
+    btn.textContent = '🔔 내 알림 토큰 확인';
+    btn.onclick = fetchAndShowToken;
+  } else if (Notification.permission === 'denied') {
+    // 차단된 상태 -> 안내만 표시
+    btn.textContent = '🔕 알림이 차단됨 (브라우저 설정 확인)';
+    btn.onclick = () => alert('브라우저/스마트폰 설정에서 이 사이트의 알림 권한을 허용으로 변경한 뒤 새로고침 해주세요.');
+  } else {
+    // 아직 물어본 적 없음 -> 정상 권한 요청 흐름
+    btn.textContent = '🔔 업데이트 알림 받기';
+    btn.onclick = () => {
+      Notification.requestPermission().then((permission) => {
+        if (permission === 'granted') {
+          fetchAndShowToken();
         }
-      }
-    });
-  };
+      });
+    };
+  }
 
   document.body.appendChild(btn);
 }
