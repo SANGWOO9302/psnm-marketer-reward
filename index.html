@@ -2057,19 +2057,24 @@ function initPushNotification() {
   btn.style.cssText = 'position:fixed;bottom:20px;right:20px;z-index:9999;background:#1e3a5f;color:#fff;border:none;padding:12px 18px;border-radius:24px;font-size:13px;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,.2);cursor:pointer;font-family:inherit;';
 
   function fetchAndShowToken() {
-    try {
-      if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-      const messaging = firebase.messaging();
-      messaging.getToken({ vapidKey: VAPID_KEY }).then((token) => {
-        console.log('[FCM] 토큰 발급 완료:', token);
-        showTokenBox(token);
-      }).catch((err) => {
-        console.error('[FCM] 토큰 발급 실패:', err);
-        alert('토큰 발급에 실패했습니다: ' + err.message);
-      });
-    } catch (e) {
-      console.error('[FCM] 초기화 오류:', e);
-    }
+    navigator.serviceWorker.ready.then((registration) => {
+      try {
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const messaging = firebase.messaging();
+        messaging.getToken({
+          vapidKey: VAPID_KEY,
+          serviceWorkerRegistration: registration
+        }).then((token) => {
+          console.log('[FCM] 토큰 발급 완료:', token);
+          showTokenBox(token);
+        }).catch((err) => {
+          console.error('[FCM] 토큰 발급 실패:', err);
+          alert('토큰 발급에 실패했습니다: ' + err.message);
+        });
+      } catch (e) {
+        console.error('[FCM] 초기화 오류:', e);
+      }
+    });
   }
 
   if (Notification.permission === 'granted') {
