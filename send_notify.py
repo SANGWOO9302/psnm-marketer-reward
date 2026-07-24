@@ -1,20 +1,13 @@
-import json, time, os, sys, urllib.request
+import json, time, os, urllib.request
 import jwt
 
-# 변경 파일 확인
-commits = json.loads(sys.argv[1]) if len(sys.argv) > 1 else []
-changed = set()
-for c in commits:
-    changed.update(c.get('modified', []))
-    changed.update(c.get('added', []))
-
-marketer_changed = 'marketer.html' in changed
-partleader_changed = 'partleader.html' in changed
+marketer_changed   = os.environ.get('MARKETER_CHANGED', '0') != '0'
+partleader_changed = os.environ.get('PARTLEADER_CHANGED', '0') != '0'
 print(f"마케터 변경: {marketer_changed}, 파트장 변경: {partleader_changed}")
 
 if not marketer_changed and not partleader_changed:
     print("알림 발송 대상 없음. 종료.")
-    sys.exit(0)
+    exit(0)
 
 # Access Token 발급
 sa = json.loads(os.environ['FIREBASE_SERVICE_ACCOUNT'])
