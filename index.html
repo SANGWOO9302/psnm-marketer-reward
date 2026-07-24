@@ -142,18 +142,18 @@ async function loadPasswordDB() {
 
   // 파트장 비밀번호 DB (하드코딩 — 24명 고정)
   PARTLEADER_PWS = [
-    {"password":"8510052008148","name":"김민석"},{"password":"7703032000350","name":"노진욱"},
-    {"password":"8302022004247","name":"박진양"},{"password":"8407272001478","name":"박민영"},
-    {"password":"8408272001001","name":"김영보"},{"password":"8310032003405","name":"김대용"},
-    {"password":"8502042003911","name":"박성진"},{"password":"8310072001943","name":"김영준"},
-    {"password":"8112222005424","name":"박시훈"},{"password":"8308242000159","name":"이동민"},
-    {"password":"8006052008640","name":"남재욱"},{"password":"7210202002940","name":"김상중"},
-    {"password":"8406032000993","name":"김정환"},{"password":"7808062003775","name":"김종수"},
-    {"password":"8401012002246","name":"문방원"},{"password":"8111112001074","name":"임수홍"},
-    {"password":"7207132004899","name":"추연"},  {"password":"8705012005430","name":"양동현"},
-    {"password":"8608082002723","name":"최성범"},{"password":"7205072002442","name":"이승민"},
-    {"password":"8210192003671","name":"이형일"},{"password":"8108202000393","name":"안재형"},
-    {"password":"8311262000704","name":"장택상"},{"password":"8209282000878","name":"신기근"}
+    {"password":"8510052008148","name":"김민석","sabun":"2008148"},{"password":"7703032000350","name":"노진욱","sabun":"2000350"},
+    {"password":"8302022004247","name":"박진양","sabun":"2004247"},{"password":"8407272001478","name":"박민영","sabun":"2001478"},
+    {"password":"8408272001001","name":"김영보","sabun":"2001001"},{"password":"8310032003405","name":"김대용","sabun":"2003405"},
+    {"password":"8502042003911","name":"박성진","sabun":"2003911"},{"password":"8310072001943","name":"김영준","sabun":"2001943"},
+    {"password":"8112222005424","name":"박시훈","sabun":"2005424"},{"password":"8308242000159","name":"이동민","sabun":"2000159"},
+    {"password":"8006052008640","name":"남재욱","sabun":"2008640"},{"password":"7210202002940","name":"김상중","sabun":"2002940"},
+    {"password":"8406032000993","name":"김정환","sabun":"2000993"},{"password":"7808062003775","name":"김종수","sabun":"2003775"},
+    {"password":"8401012002246","name":"문방원","sabun":"2002246"},{"password":"8111112001074","name":"임수홍","sabun":"2001074"},
+    {"password":"7207132004899","name":"추연","sabun":"2004899"},  {"password":"8705012005430","name":"양동현","sabun":"2005430"},
+    {"password":"8608082002723","name":"최성범","sabun":"2002723"},{"password":"7205072002442","name":"이승민","sabun":"2002442"},
+    {"password":"8210192003671","name":"이형일","sabun":"2003671"},{"password":"8108202000393","name":"안재형","sabun":"2000393"},
+    {"password":"8311262000704","name":"장택상","sabun":"2000704"},{"password":"8209282000878","name":"신기근","sabun":"2000878"}
   ];
 }
 
@@ -208,6 +208,8 @@ function tryLogin() {
   } else {
     const user = PARTLEADER_PWS.find(u => u.password === pw);
     if (user) {
+      sessionStorage.setItem('pl_name', user.name);
+      sessionStorage.setItem('pl_sabun', user.sabun);
       goToDashboard('partleader.html', pw);
     } else {
       errEl.textContent = '비밀번호가 올바르지 않습니다.';

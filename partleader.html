@@ -1004,6 +1004,7 @@ if ('serviceWorker' in navigator) {
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-messaging-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyDGU5cSiIA4ihm_7IgMDCXw6WZFY6cHnJY",
@@ -1113,6 +1114,100 @@ function initPushNotification() {
   document.body.appendChild(btn);
 }
 window.addEventListener('load', initPushNotification);
+
+// ===== 담당자에게 메시지 남기기 =====
+const EMAILJS_SERVICE_ID  = "service_lrluebz";
+const EMAILJS_TEMPLATE_ID = "template_nou5vwo";
+const EMAILJS_PUBLIC_KEY  = "VH4hEwvzA3uo13tmt";
+
+// 진입 화면(index.html)에서 넘어온 파트장 신원 정보
+const PL_USER = {
+  name: sessionStorage.getItem('pl_name') || '알 수 없음',
+  sabun: sessionStorage.getItem('pl_sabun') || ''
+};
+
+function initMessageButton() {
+  const btn = document.createElement('button');
+  btn.textContent = '✉️ 담당자에게 메시지';
+  btn.style.cssText = 'position:fixed;bottom:70px;right:20px;z-index:9999;background:#0f766e;color:#fff;border:none;padding:12px 18px;border-radius:24px;font-size:13px;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,.2);cursor:pointer;font-family:inherit;';
+  btn.onclick = openMessageModal;
+  document.body.appendChild(btn);
+}
+
+function openMessageModal() {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:10001;display:flex;align-items:center;justify-content:center;padding:20px;';
+  const box = document.createElement('div');
+  box.style.cssText = 'background:#fff;border-radius:14px;padding:22px;max-width:420px;width:100%;font-family:inherit;';
+  box.innerHTML = `
+    <div style="font-size:16px;font-weight:700;margin-bottom:4px;color:#1e293b;">담당자에게 메시지 남기기</div>
+    <div style="font-size:12px;color:#64748b;margin-bottom:16px;">이 메시지는 담당자만 확인할 수 있습니다.</div>
+
+    <label style="font-size:12px;font-weight:600;color:#334155;display:block;margin-bottom:6px;">항목 선택</label>
+    <select id="msgCategory2" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;margin-bottom:14px;font-family:inherit;">
+      <option value="KPI 오류">KPI 오류</option>
+      <option value="성과보상 금액 오류">성과보상 금액 오류</option>
+      <option value="기타">기타</option>
+    </select>
+
+    <label style="font-size:12px;font-weight:600;color:#334155;display:block;margin-bottom:6px;">내용</label>
+    <textarea id="msgContent2" placeholder="예: 파트 KPI 합산점수가 실제와 다르게 표시됩니다." style="width:100%;height:100px;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;resize:none;font-family:inherit;margin-bottom:14px;box-sizing:border-box;"></textarea>
+
+    <div style="display:flex;gap:8px;">
+      <button id="msgCancelBtn2" style="flex:1;background:#e2e8f0;color:#1e293b;border:none;padding:12px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;">취소</button>
+      <button id="msgSubmitBtn2" style="flex:1;background:#0f766e;color:#fff;border:none;padding:12px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;">전송</button>
+    </div>
+    <div id="msgStatus2" style="font-size:12px;text-align:center;margin-top:10px;min-height:16px;"></div>
+  `;
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+
+  box.querySelector('#msgCancelBtn2').onclick = () => overlay.remove();
+  box.querySelector('#msgSubmitBtn2').onclick = async () => {
+    const category = box.querySelector('#msgCategory2').value;
+    const content = box.querySelector('#msgContent2').value.trim();
+    const statusEl = box.querySelector('#msgStatus2');
+    if (!content) { statusEl.textContent = '내용을 입력해주세요.'; statusEl.style.color = '#dc2626'; return; }
+
+    box.querySelector('#msgSubmitBtn2').disabled = true;
+    statusEl.textContent = '전송 중...';
+    statusEl.style.color = '#64748b';
+
+    try {
+      if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+      await db.collection('messages').add({
+        name: PL_USER.name,
+        sabun: PL_USER.sabun,
+        role: APP_ROLE,
+        category: category,
+        content: content,
+        status: '접수',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      if (typeof emailjs !== 'undefined' && !EMAILJS_SERVICE_ID.startsWith('여기에')) {
+        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+          sender_name: PL_USER.name,
+          sender_sabun: PL_USER.sabun,
+          role: '파트장',
+          category: category,
+          content: content
+        }, EMAILJS_PUBLIC_KEY).catch(err => console.error('[EmailJS] 발송 실패:', err));
+      }
+
+      statusEl.textContent = '전송 완료되었습니다.';
+      statusEl.style.color = '#16a34a';
+      setTimeout(() => overlay.remove(), 1200);
+    } catch (e) {
+      console.error('[메시지 전송 실패]', e);
+      statusEl.textContent = '전송에 실패했습니다. 다시 시도해주세요.';
+      statusEl.style.color = '#dc2626';
+      box.querySelector('#msgSubmitBtn2').disabled = false;
+    }
+  };
+}
+window.addEventListener('load', initMessageButton);
 </script>
 
 </body>
