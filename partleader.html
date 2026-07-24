@@ -1037,14 +1037,25 @@ function showTokenBox(token, saved) {
   box.querySelector('#closeTokenBtn2').onclick = () => overlay.remove();
 }
 
+function getDeviceId() {
+  let id = localStorage.getItem('dashboard_device_id');
+  if (!id) {
+    id = (crypto.randomUUID ? crypto.randomUUID() : 'dev-' + Date.now() + '-' + Math.random().toString(36).slice(2));
+    localStorage.setItem('dashboard_device_id', id);
+  }
+  return id;
+}
+
 async function saveTokenToFirestore(token) {
   try {
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-    const docId = token + '_' + APP_ROLE;
+    const deviceId = getDeviceId();
+    const docId = deviceId + '_' + APP_ROLE;
     await db.collection('tokens').doc(docId).set({
       token: token,
       role: APP_ROLE,
+      deviceId: deviceId,
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     });
     return true;
