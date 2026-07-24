@@ -25,7 +25,17 @@ jobs:
       - name: 패키지 설치
         run: pip install PyJWT cryptography
 
-      - name: 변경 파일 확인 및 알림 발송
+      - name: 변경 파일 확인
+        id: changes
+        run: |
+          git diff --name-only HEAD~1 HEAD > changed_files.txt
+          cat changed_files.txt
+          echo "marketer=$(grep -c 'marketer.html' changed_files.txt || true)" >> $GITHUB_OUTPUT
+          echo "partleader=$(grep -c 'partleader.html' changed_files.txt || true)" >> $GITHUB_OUTPUT
+
+      - name: 알림 발송
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-        run: python send_notify.py "${{ toJson(github.event.commits) }}"
+          MARKETER_CHANGED: ${{ steps.changes.outputs.marketer }}
+          PARTLEADER_CHANGED: ${{ steps.changes.outputs.partleader }}
+        run: python send_notify.py
