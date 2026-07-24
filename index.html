@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SK 도매 성과보상 Dashboard</title>
+
+<!-- PWA 설정 -->
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#1e3a5f">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="성과보상 Dashboard">
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f1f3d 0%, #1e3a5f 50%, #2563eb 100%);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 24px;
+}
+
+.logo { font-size: 52px; margin-bottom: 12px; }
+.title { color: #fff; font-size: 21px; font-weight: 700; margin-bottom: 4px; text-align: center; }
+.sub { color: rgba(255,255,255,.6); font-size: 13px; margin-bottom: 44px; text-align: center; }
+
+/* 역할 카드 */
+.role-wrap { display: flex; gap: 16px; margin-bottom: 32px; width: 100%; max-width: 360px; }
+.role-card {
+  flex: 1; background: rgba(255,255,255,.1);
+  border: 2px solid rgba(255,255,255,.2);
+  border-radius: 16px; padding: 24px 16px;
+  text-align: center; cursor: pointer;
+  transition: all .2s; color: #fff;
+}
+.role-card:hover { background: rgba(255,255,255,.18); transform: translateY(-2px); }
+.role-card.selected { background: rgba(255,255,255,.25); border-color: #60a5fa; box-shadow: 0 0 0 3px rgba(96,165,250,.3); }
+.rc-icon { font-size: 34px; margin-bottom: 8px; }
+.rc-label { font-size: 15px; font-weight: 700; }
+.rc-sub { font-size: 11px; color: rgba(255,255,255,.6); margin-top: 4px; line-height: 1.4; }
+
+/* 비밀번호 영역 */
+.pw-wrap { width: 100%; max-width: 360px; display: none; }
+.pw-wrap.show { display: block; }
+.pw-label { color: rgba(255,255,255,.85); font-size: 13px; margin-bottom: 6px; font-weight: 500; }
+.pw-hint { color: rgba(255,255,255,.5); font-size: 11px; margin-bottom: 12px; line-height: 1.6; }
+.pw-input {
+  width: 100%; padding: 14px 16px;
+  background: rgba(255,255,255,.12);
+  border: 1.5px solid rgba(255,255,255,.25);
+  border-radius: 12px; color: #fff;
+  font-size: 15px; font-family: 'Noto Sans KR', sans-serif;
+  outline: none; letter-spacing: 2px; margin-bottom: 12px;
+  -webkit-text-security: disc;
+}
+.pw-input::placeholder { color: rgba(255,255,255,.4); letter-spacing: 0; }
+.pw-input:focus { border-color: #60a5fa; background: rgba(255,255,255,.18); }
+.pw-btn {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  border: none; border-radius: 12px;
+  color: #fff; font-size: 15px; font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer; transition: opacity .2s;
+}
+.pw-btn:hover { opacity: .9; }
+.pw-error { color: #fca5a5; font-size: 12px; text-align: center; margin-top: 8px; min-height: 18px; }
+.back-btn {
+  background: none; border: none; color: rgba(255,255,255,.5);
+  font-size: 12px; cursor: pointer; margin-top: 16px;
+  font-family: 'Noto Sans KR', sans-serif;
+  text-decoration: underline; display: block; text-align: center;
+}
+.back-btn:hover { color: rgba(255,255,255,.8); }
+
+/* 로딩 */
+.loading {
+  display: none; color: rgba(255,255,255,.8);
+  font-size: 14px; text-align: center; margin-top: 16px;
+}
+.loading.show { display: block; }
+</style>
+</head>
+<body>
+
+<div class="logo">📊</div>
+<div class="title">SK 도매 성과보상 Dashboard</div>
+<div class="sub">역할을 선택하고 비밀번호를 입력해주세요</div>
+
+<!-- 역할 선택 -->
+<div class="role-wrap" id="roleWrap">
+  <div class="role-card" id="cardMarketer" onclick="selectRole('marketer')">
+    <div class="rc-icon">🏃</div>
+    <div class="rc-label">마케터</div>
+    <div class="rc-sub">도매 마케터<br>성과보상 Dashboard</div>
+  </div>
+  <div class="role-card" id="cardPartleader" onclick="selectRole('partleader')">
+    <div class="rc-icon">👔</div>
+    <div class="rc-label">파트장</div>
+    <div class="rc-sub">파트장 KPI 및<br>성과보상 Dashboard</div>
+  </div>
+</div>
+
+<!-- 비밀번호 입력 -->
+<div class="pw-wrap" id="pwWrap">
+  <div class="pw-label" id="pwLabel">비밀번호를 입력해주세요</div>
+  <div class="pw-hint" id="pwHint"></div>
+  <input type="password" class="pw-input" id="pwInput"
+    placeholder="비밀번호 입력"
+    maxlength="20"
+    onkeydown="if(event.key==='Enter') tryLogin()">
+  <button class="pw-btn" onclick="tryLogin()">입장하기</button>
+  <div class="pw-error" id="pwError"></div>
+  <button class="back-btn" onclick="goBack()">← 역할 선택으로 돌아가기</button>
+</div>
+
+<div class="loading" id="loading">⏳ 대시보드를 불러오는 중...</div>
+
+<script>
+// ===== 마케터 비밀번호 DB (USERS에서 password 필드만 사용) =====
+// 실제 USERS 배열은 marketer.html 내부에 있으므로,
+// 진입 화면에서는 비밀번호 검증만을 위한 간소화 DB 사용
+let MARKETER_PWS = null;
+let PARTLEADER_PWS = null;
+
+// marketer.html에서 USERS를 fetch해서 비밀번호 목록 추출
+async function loadPasswordDB() {
+  try {
+    const res = await fetch('./marketer.html');
+    const text = await res.text();
+    const m = text.match(/const USERS = (\[[\s\S]*?\]);/);
+    if (m) {
+      const users = JSON.parse(m[1]);
+      MARKETER_PWS = users.map(u => ({ password: u.password, name: u.name, role: u.role }));
+    }
+  } catch(e) { console.error('마케터 DB 로드 실패:', e); }
+
+  // 파트장 비밀번호 DB (하드코딩 — 24명 고정)
+  PARTLEADER_PWS = [
+    {"password":"8510052008148","name":"김민석"},{"password":"7703032000350","name":"노진욱"},
+    {"password":"8302022004247","name":"박진양"},{"password":"8407272001478","name":"박민영"},
+    {"password":"8408272001001","name":"김영보"},{"password":"8310032003405","name":"김대용"},
+    {"password":"8502042003911","name":"박성진"},{"password":"8310072001943","name":"김영준"},
+    {"password":"8112222005424","name":"박시훈"},{"password":"8308242000159","name":"이동민"},
+    {"password":"8006052008640","name":"남재욱"},{"password":"7210202002940","name":"김상중"},
+    {"password":"8406032000993","name":"김정환"},{"password":"7808062003775","name":"김종수"},
+    {"password":"8401012002246","name":"문방원"},{"password":"8111112001074","name":"임수홍"},
+    {"password":"7207132004899","name":"추연"},  {"password":"8705012005430","name":"양동현"},
+    {"password":"8608082002723","name":"최성범"},{"password":"7205072002442","name":"이승민"},
+    {"password":"8210192003671","name":"이형일"},{"password":"8108202000393","name":"안재형"},
+    {"password":"8311262000704","name":"장택상"},{"password":"8209282000878","name":"신기근"}
+  ];
+}
+
+// 페이지 로드 시 DB 미리 로드
+window.addEventListener('load', loadPasswordDB);
+
+let selectedRole = null;
+
+function selectRole(role) {
+  selectedRole = role;
+  document.getElementById('cardMarketer').classList.toggle('selected', role === 'marketer');
+  document.getElementById('cardPartleader').classList.toggle('selected', role === 'partleader');
+
+  const pwWrap = document.getElementById('pwWrap');
+  document.getElementById('pwInput').value = '';
+  document.getElementById('pwError').textContent = '';
+
+  if (role === 'marketer') {
+    document.getElementById('pwLabel').textContent = '마케터 비밀번호 입력';
+    document.getElementById('pwHint').textContent = '생년월일 6자리 + 사번 7자리\n예) 930101 + 1234567 → 9301011234567';
+  } else {
+    document.getElementById('pwLabel').textContent = '파트장 비밀번호 입력';
+    document.getElementById('pwHint').textContent = '생년월일 6자리 + 사번 7자리\n예) 840101 + 2001234 → 8401012001234';
+  }
+  pwWrap.classList.add('show');
+  setTimeout(() => document.getElementById('pwInput').focus(), 100);
+}
+
+function goBack() {
+  selectedRole = null;
+  document.getElementById('pwWrap').classList.remove('show');
+  document.getElementById('cardMarketer').classList.remove('selected');
+  document.getElementById('cardPartleader').classList.remove('selected');
+  document.getElementById('pwInput').value = '';
+  document.getElementById('pwError').textContent = '';
+}
+
+function tryLogin() {
+  const pw = document.getElementById('pwInput').value.trim();
+  const errEl = document.getElementById('pwError');
+  if (!pw) { errEl.textContent = '비밀번호를 입력해주세요.'; return; }
+
+  if (selectedRole === 'marketer') {
+    if (!MARKETER_PWS) { errEl.textContent = '잠시 후 다시 시도해주세요.'; return; }
+    const user = MARKETER_PWS.find(u => u.password === pw);
+    if (user) {
+      goToDashboard('marketer.html', pw);
+    } else {
+      errEl.textContent = '비밀번호가 올바르지 않습니다.';
+      document.getElementById('pwInput').value = '';
+    }
+  } else {
+    const user = PARTLEADER_PWS.find(u => u.password === pw);
+    if (user) {
+      goToDashboard('partleader.html', pw);
+    } else {
+      errEl.textContent = '비밀번호가 올바르지 않습니다.';
+      document.getElementById('pwInput').value = '';
+    }
+  }
+}
+
+function goToDashboard(page, pw) {
+  document.getElementById('loading').classList.add('show');
+  document.getElementById('pwWrap').classList.remove('show');
+  // sessionStorage에 비밀번호 저장 → 대시보드에서 자동 로그인
+  sessionStorage.setItem('dashboard_pw', pw);
+  sessionStorage.setItem('dashboard_role', selectedRole);
+  setTimeout(() => { window.location.href = page; }, 300);
+}
+
+// PWA 서비스워커
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js');
+  });
+}
+</script>
+
+</body>
+</html>
