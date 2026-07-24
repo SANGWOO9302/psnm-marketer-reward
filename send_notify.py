@@ -14,150 +14,135 @@ if not marketer_changed and not partleader_changed:
     sys.exit(0)
 
 # ---------------------------------------------------------------
-# 2) 서비스 계정 JSON 로드 및 검증
+# 2) 서비스 계정 로드
 # ---------------------------------------------------------------
-raw = os.environ.get('FIREBASE_SERVICE_ACCOUNT', '')
-if not raw.strip():
-    print("[오류] FIREBASE_SERVICE_ACCOUNT 시크릿이 비어 있습니다.")
-    sys.exit(1)
-
-try:
-    sa = json.loads(raw)
-except json.JSONDecodeError as e:
-    print(f"[오류] 서비스 계정 JSON 파싱 실패: {e}")
-    print("→ GitHub Secrets에 JSON 파일 '전체 내용'이 그대로 들어갔는지 확인하세요.")
-    sys.exit(1)
-
-# 필수 필드 확인
-for key in ("client_email", "private_key", "project_id", "token_uri"):
-    if key not in sa:
-        print(f"[오류] 서비스 계정 JSON에 '{key}' 필드가 없습니다.")
-        sys.exit(1)
-
-print(f"[2] 서비스 계정 로드 완료")
-print(f"    project_id  : {sa['project_id']}")
-print(f"    client_email: {sa['client_email']}")
-
-# private_key 줄바꿈 정규화 (\n 이스케이프가 문자로 남아있는 경우 복원)
-private_key = sa["private_key"]
-if "\\n" in private_key:
-    print("    private_key: 이스케이프된 \\n 발견 → 실제 줄바꿈으로 변환")
-    private_key = private_key.replace("\\n", "\n")
-
-if not private_key.startswith("-----BEGIN"):
-    print("[오류] private_key 형식이 올바르지 않습니다 (BEGIN 헤더 없음).")
-    sys.exit(1)
-
-print(f"    private_key : 정상 (길이 {len(private_key)}자)")
+sa = json.loads(os.environ['FIREBASE_SERVICE_ACCOUNT'])
+private_key = sa["private_key"].replace("\\n", "\n")
+PROJECT_ID = sa["project_id"]
+print(f"[2] 서비스 계정 로드 완료 (project: {PROJECT_ID})")
 
 # ---------------------------------------------------------------
-# 3) Access Token 발급
+# 3) Access Token 발급 (Firestore + FCM 공용 스코프)
 # ---------------------------------------------------------------
-TOKEN_URI = sa.get("token_uri", "https://oauth2.googleapis.com/token")
 now = int(time.time())
-
 claims = {
-    "iss":   sa["client_email"],
-    "scope": "https://www.googleapis.com/auth/firebase.messaging",
-    "aud":   TOKEN_URI,
-    "iat":   now,
-    "exp":   now + 3600,
+    "iss": sa["client_email"],
+    "scope": "https://www.googleapis.com/auth/datastore https://www.googleapis.com/auth/firebase.messaging",
+    "aud": sa.get("token_uri", "https://oauth2.googleapis.com/token"),
+    "iat": now,
+    "exp": now + 3600,
 }
-
-try:
-    assertion = jwt.encode(claims, private_key, algorithm="RS256")
-except Exception as e:
-    print(f"[오류] JWT 서명 실패: {e}")
-    print("→ private_key가 손상되었을 가능성이 높습니다. 서비스 계정 키를 재발급하세요.")
-    sys.exit(1)
-
-# PyJWT 1.x는 bytes를 반환하므로 문자열로 통일
+assertion = jwt.encode(claims, private_key, algorithm="RS256")
 if isinstance(assertion, bytes):
     assertion = assertion.decode("utf-8")
 
-# form body를 정식으로 URL 인코딩
 form = urllib.parse.urlencode({
     "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
-    "assertion":  assertion,
+    "assertion": assertion,
 }).encode("utf-8")
 
 token_req = urllib.request.Request(
-    TOKEN_URI,
+    sa.get("token_uri", "https://oauth2.googleapis.com/token"),
     data=form,
     headers={"Content-Type": "application/x-www-form-urlencoded"},
-    method="POST",
 )
-
 try:
     with urllib.request.urlopen(token_req) as res:
         access_token = json.loads(res.read())["access_token"]
     print("[3] Access Token 발급 완료")
 except urllib.error.HTTPError as e:
-    detail = e.read().decode("utf-8", errors="replace")
-    print(f"[오류] Access Token 발급 실패 (HTTP {e.code})")
-    print(f"    Google 응답: {detail}")
-    print()
-    print("    ── 원인별 조치 ──")
-    print("    invalid_grant  : 서버 시간 문제이거나 private_key가 손상됨 → 키 재발급")
-    print("    invalid_client : client_email이 잘못됨 → 서비스 계정 JSON 재확인")
-    print("    invalid_scope  : 권한 범위 문제 → Firebase 프로젝트 권한 확인")
+    print(f"[오류] Access Token 발급 실패: {e.read().decode()}")
     sys.exit(1)
 
+HEADERS = {
+    "Authorization": f"Bearer {access_token}",
+    "Content-Type": "application/json; charset=UTF-8",
+}
+
 # ---------------------------------------------------------------
-# 4) FCM 발송
+# 4) Firestore에서 토큰 목록 읽기
 # ---------------------------------------------------------------
-PROJECT_ID = sa["project_id"]
+def list_tokens():
+    url = f"https://firestore.googleapis.com/v1/projects/{PROJECT_ID}/databases/(default)/documents/tokens?pageSize=300"
+    tokens = []
+    while url:
+        req = urllib.request.Request(url, headers=HEADERS)
+        with urllib.request.urlopen(req) as res:
+            data = json.loads(res.read())
+        for doc in data.get("documents", []):
+            fields = doc.get("fields", {})
+            tok = fields.get("token", {}).get("stringValue")
+            role = fields.get("role", {}).get("stringValue", "")
+            if tok:
+                tokens.append((tok, role))
+        next_token = data.get("nextPageToken")
+        if next_token:
+            url = f"https://firestore.googleapis.com/v1/projects/{PROJECT_ID}/databases/(default)/documents/tokens?pageSize=300&pageToken={next_token}"
+        else:
+            url = None
+    return tokens
+
+all_tokens = list_tokens()
+print(f"[4] Firestore에서 토큰 {len(all_tokens)}개 로드 완료")
+
+marketer_tokens   = [t for t, r in all_tokens if r == "marketer"]
+partleader_tokens = [t for t, r in all_tokens if r == "partleader"]
+print(f"    마케터 토큰: {len(marketer_tokens)}개, 파트장 토큰: {len(partleader_tokens)}개")
+
+# ---------------------------------------------------------------
+# 5) 개별 발송
+# ---------------------------------------------------------------
 FCM_URL = f"https://fcm.googleapis.com/v1/projects/{PROJECT_ID}/messages:send"
 BASE = "https://sangwoo9302.github.io/psnm-marketer-reward"
 
-def send_fcm(title, body, link):
+def send_to_token(token, title, body, link):
     msg = {
         "message": {
-            "topic": "all-users",
+            "token": token,
             "notification": {"title": title, "body": body},
             "webpush": {
-                "notification": {
-                    "title": title,
-                    "body":  body,
-                    "icon":  f"{BASE}/icon-192.png",
-                },
+                "notification": {"title": title, "body": body, "icon": f"{BASE}/icon-192.png"},
                 "fcm_options": {"link": link},
             },
         }
     }
     data = json.dumps(msg, ensure_ascii=False).encode("utf-8")
-    req = urllib.request.Request(
-        FCM_URL,
-        data=data,
-        headers={
-            "Authorization": f"Bearer {access_token}",
-            "Content-Type":  "application/json; charset=UTF-8",
-        },
-        method="POST",
-    )
+    req = urllib.request.Request(FCM_URL, data=data, headers=HEADERS)
     try:
-        with urllib.request.urlopen(req) as res:
-            print(f"    발송 성공: {json.loads(res.read())}")
+        urllib.request.urlopen(req)
+        return True
     except urllib.error.HTTPError as e:
-        detail = e.read().decode("utf-8", errors="replace")
-        print(f"[오류] FCM 발송 실패 (HTTP {e.code})")
-        print(f"    Google 응답: {detail}")
-        sys.exit(1)
+        err = e.read().decode()
+        print(f"    발송 실패 (토큰 일부: {token[:15]}...): {err[:200]}")
+        return False
 
-if marketer_changed:
-    print("[4] 마케터 알림 발송 중...")
-    send_fcm(
+def broadcast(tokens, title, body, link):
+    success = 0
+    for t in tokens:
+        if send_to_token(t, title, body, link):
+            success += 1
+    print(f"    발송 완료: {success}/{len(tokens)}건 성공")
+
+if marketer_changed and marketer_tokens:
+    print("[5] 마케터 알림 발송 중...")
+    broadcast(
+        marketer_tokens,
         "📊 마케터 성과보상 대시보드 업데이트",
         "새로운 성과보상 대시보드가 업로드되었습니다. 확인해보세요!",
         f"{BASE}/marketer.html",
     )
+elif marketer_changed:
+    print("[5] 마케터 알림 대상 토큰 없음 (아직 아무도 알림을 허용하지 않음)")
 
-if partleader_changed:
-    print("[4] 파트장 알림 발송 중...")
-    send_fcm(
+if partleader_changed and partleader_tokens:
+    print("[5] 파트장 알림 발송 중...")
+    broadcast(
+        partleader_tokens,
         "📊 파트장 KPI 대시보드 업데이트",
         "새로운 파트장 KPI 대시보드가 업로드되었습니다. 확인해보세요!",
         f"{BASE}/partleader.html",
     )
+elif partleader_changed:
+    print("[5] 파트장 알림 대상 토큰 없음 (아직 아무도 알림을 허용하지 않음)")
 
-print("[완료] 모든 작업이 정상 종료되었습니다.")
+print("[완료]")
