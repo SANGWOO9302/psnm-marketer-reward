@@ -83,7 +83,7 @@ BASE = "https://sangwoo9302.github.io/psnm-marketer-reward"
 # ★ 핵심 수정: "notification" 필드를 빼고 "data"만 전송
 # → 브라우저 자동 표시 + 서비스워커 수동 표시가 겹쳐서 2번 뜨던 문제 해결
 # → 서비스워커가 data를 읽어 직접 1번만 알림을 그림
-def send_to_token(token, title, body, link):
+def send_to_token(token, title, body, link, tag):
     msg = {
         "message": {
             "token": token,
@@ -92,6 +92,7 @@ def send_to_token(token, title, body, link):
                 "body": body,
                 "link": link,
                 "icon": f"{BASE}/icon-192.png",
+                "tag": tag,
             },
             "webpush": {
                 "headers": {"Urgency": "high"}
@@ -108,10 +109,10 @@ def send_to_token(token, title, body, link):
         print(f"    발송 실패 (토큰 일부: {token[:15]}...): {err[:200]}")
         return False
 
-def broadcast(tokens, title, body, link):
+def broadcast(tokens, title, body, link, tag):
     success = 0
     for t in tokens:
-        if send_to_token(t, title, body, link):
+        if send_to_token(t, title, body, link, tag):
             success += 1
     print(f"    발송 완료: {success}/{len(tokens)}건 성공")
 
@@ -122,6 +123,7 @@ if marketer_changed and marketer_tokens:
         "📊 마케터 성과보상 대시보드 업데이트",
         "새로운 성과보상 대시보드가 업로드되었습니다. 확인해보세요!",
         f"{BASE}/marketer.html",
+        "marketer-update",
     )
 elif marketer_changed:
     print("[5] 마케터 알림 대상 토큰 없음")
@@ -133,6 +135,7 @@ if partleader_changed and partleader_tokens:
         "📊 파트장 KPI 대시보드 업데이트",
         "새로운 파트장 KPI 대시보드가 업로드되었습니다. 확인해보세요!",
         f"{BASE}/partleader.html",
+        "partleader-update",
     )
 elif partleader_changed:
     print("[5] 파트장 알림 대상 토큰 없음")
