@@ -13,12 +13,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 저장소 체크아웃
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 2
 
       - name: Python 설치
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
@@ -30,8 +30,16 @@ jobs:
         run: |
           git diff --name-only HEAD~1 HEAD > changed_files.txt
           cat changed_files.txt
-          echo "marketer=$(grep -c 'marketer.html' changed_files.txt || true)" >> $GITHUB_OUTPUT
-          echo "partleader=$(grep -c 'partleader.html' changed_files.txt || true)" >> $GITHUB_OUTPUT
+          if grep -q 'marketer.html' changed_files.txt; then
+            echo "marketer=1" >> $GITHUB_OUTPUT
+          else
+            echo "marketer=0" >> $GITHUB_OUTPUT
+          fi
+          if grep -q 'partleader.html' changed_files.txt; then
+            echo "partleader=1" >> $GITHUB_OUTPUT
+          else
+            echo "partleader=0" >> $GITHUB_OUTPUT
+          fi
 
       - name: 알림 발송
         env:
