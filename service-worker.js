@@ -1,14 +1,15 @@
 // service-worker.js
 // PWA 오프라인 지원(캐싱) + FCM 푸시 알림 수신 통합
 
-const CACHE_NAME = "reward-dashboard-cache-v4";
+const CACHE_NAME = "reward-dashboard-cache-v5";
 const FILES_TO_CACHE = [
   "./index.html",
   "./marketer.html",
   "./partleader.html",
   "./manifest.json",
   "./icon-192.png",
-  "./icon-512.png"
+  "./icon-512.png",
+  "./badge-96.png"
 ];
 
 self.addEventListener("install", (event) => {
@@ -69,7 +70,7 @@ messaging.onBackgroundMessage((payload) => {
   self.registration.showNotification(title, {
     body,
     icon,
-    badge: "./icon-192.png",
+    badge: "./badge-96.png", // 안드로이드 상태바용 투명 배경 흰색 실루엣 아이콘
     data: { link },
     tag: data.tag || "dashboard-update-" + Date.now() // role별 고유 tag → 서로 다른 알림은 겹치지 않고 각각 유지
   });
