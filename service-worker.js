@@ -1,7 +1,7 @@
 // service-worker.js
 // PWA 오프라인 지원(캐싱) + FCM 푸시 알림 수신 통합
 
-const CACHE_NAME = "reward-dashboard-cache-v5";
+const CACHE_NAME = "reward-dashboard-cache-v6";
 const FILES_TO_CACHE = [
   "./index.html",
   "./marketer.html",
@@ -9,7 +9,8 @@ const FILES_TO_CACHE = [
   "./manifest.json",
   "./icon-192.png",
   "./icon-512.png",
-  "./badge-96.png"
+  "./badge-96.png",
+  "./apple-touch-icon.png"
 ];
 
 self.addEventListener("install", (event) => {
