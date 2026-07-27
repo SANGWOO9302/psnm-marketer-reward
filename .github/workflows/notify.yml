@@ -12,10 +12,10 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-      - name: 저장소 체크아웃
+      - name: 저장소 체크아웃 (전체 이력 포함)
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
 
       - name: Python 설치
         uses: actions/setup-python@v5
@@ -28,8 +28,21 @@ jobs:
       - name: 변경 파일 확인
         id: changes
         run: |
-          git diff --name-only HEAD~1 HEAD > changed_files.txt
+          BEFORE="${{ github.event.before }}"
+          AFTER="${{ github.sha }}"
+
+          # 최초 푸시 등으로 before가 없는 경우(전부 0) → 직전 커밋과 비교
+          if [ "$BEFORE" = "0000000000000000000000000000000000000000" ] || [ -z "$BEFORE" ]; then
+            echo "before 값이 없어 HEAD~1과 비교합니다"
+            git diff --name-only HEAD~1 "$AFTER" > changed_files.txt || git diff --name-only "$AFTER" > changed_files.txt
+          else
+            git diff --name-only "$BEFORE" "$AFTER" > changed_files.txt
+          fi
+
+          echo "===== 이번 푸시에서 변경된 파일 목록 ====="
           cat changed_files.txt
+          echo "========================================"
+
           if grep -q 'marketer.html' changed_files.txt; then
             echo "marketer=1" >> $GITHUB_OUTPUT
           else
