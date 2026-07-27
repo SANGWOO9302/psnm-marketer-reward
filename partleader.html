@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko"> 
+<html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=1200, initial-scale=1, user-scalable=yes">
@@ -7,7 +7,7 @@
 
 <!-- PWA 설정 -->
 <link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#1e3a5f">
+<meta name="theme-color" content="#00665E">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -15,11 +15,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-:root{--bg:#f0f4f8;--card:#fff;--border:#e2e8f0;--text:#1e293b;--sub:#64748b;--mute:#94a3b8;--primary:#3b82f6;--green:#10b981;--orange:#f59e0b;--red:#ef4444;--purple:#8b5cf6;--teal:#14b8a6;}
+:root{--bg:#f0f4f8;--card:#fff;--border:#e2e8f0;--text:#1e293b;--sub:#64748b;--mute:#94a3b8;--primary:#14B8A6;--green:#10b981;--orange:#f59e0b;--red:#ef4444;--purple:#8b5cf6;--teal:#14b8a6;}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);font-size:13px}
 /* HEADER */
-.hd{background:linear-gradient(135deg,#1e3a5f,#2563eb);color:#fff;padding:18px 28px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 16px rgba(37,99,235,.25)}
+.hd{background:linear-gradient(135deg,#00665E,#00897B);color:#fff;padding:18px 28px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 16px rgba(37,99,235,.25)}
 .hd h1{font-size:19px;font-weight:700}
 .hd .sub{font-size:11px;opacity:.75;margin-top:3px}
 .hd-r{display:flex;gap:16px;align-items:center}
@@ -84,7 +84,7 @@ tbody tr:last-child td{border-bottom:none}
 .badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600}
 .bg{background:rgba(16,185,129,.12);color:#059669}
 .br{background:rgba(239,68,68,.12);color:#dc2626}
-.bb{background:rgba(59,130,246,.12);color:#2563eb}
+.bb{background:rgba(59,130,246,.12);color:#00897B}
 .bo{background:rgba(245,158,11,.12);color:#d97706}
 thead th.th-group{background:#eef2f7;color:#475569;font-size:11px;font-weight:700;text-align:center;border-bottom:1px solid var(--border);padding:5px 8px}
 thead th.th-sub{background:#f8fafc;color:var(--sub);font-size:10px;font-weight:600;text-align:center;border-bottom:1px solid var(--border);padding:5px 8px;white-space:nowrap}
@@ -147,7 +147,7 @@ thead th.th-fix{background:#f8fafc;color:var(--sub);font-size:11px;font-weight:6
 </style>
 </head>
 <body>
-<div id="scrollHint" style="position:fixed;top:0;left:0;right:0;z-index:9998;background:#1e3a5f;color:#fff;font-size:11px;text-align:center;padding:5px 0;font-family:'Noto Sans KR',sans-serif;">
+<div id="scrollHint" style="position:fixed;top:0;left:0;right:0;z-index:9998;background:#00665E;color:#fff;font-size:11px;text-align:center;padding:5px 0;font-family:'Noto Sans KR',sans-serif;">
   👉 화면을 좌우로 드래그하면 전체 내용을 볼 수 있어요
 </div>
 <div style="height:26px;"></div>
@@ -218,7 +218,7 @@ thead th.th-fix{background:#f8fafc;color:var(--sub);font-size:11px;font-weight:6
           <th class="th-sub" style="color:#8b5cf6">과정지표</th>
           <th class="th-sub" style="color:#f59e0b">변화관리</th>
           <th class="th-sub" style="color:#06b6d4">가점지표</th>
-          <th class="th-sub" style="color:#3b82f6">합산점수</th>
+          <th class="th-sub" style="color:#14B8A6">합산점수</th>
           <th class="th-sub">전사순위</th>
           <th class="th-sub">담당순위</th>
         </tr>
@@ -263,7 +263,7 @@ thead th.th-fix{background:#f8fafc;color:var(--sub);font-size:11px;font-weight:6
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;align-items:stretch" id="deepRadarWrap">
       <div class="dp" style="min-width:0;display:flex;flex-direction:column">
         <h3 style="display:flex;align-items:center;gap:6px;margin-bottom:10px">
-          <span style="background:rgba(59,130,246,.12);color:#2563eb;font-size:10px;padding:2px 8px;border-radius:8px;font-weight:700">KPI</span>
+          <span style="background:rgba(59,130,246,.12);color:#00897B;font-size:10px;padding:2px 8px;border-radius:8px;font-weight:700">KPI</span>
           지표별 달성률 레이더
         </h3>
         <canvas id="deepRadarChart" style="max-height:280px"></canvas>
@@ -286,7 +286,7 @@ thead th.th-fix{background:#f8fafc;color:var(--sub);font-size:11px;font-weight:6
     </div>
     <div class="deep-grid2">
       <div class="dp">
-        <h3 style="display:flex;align-items:center;gap:6px"><span style="background:rgba(59,130,246,.12);color:#2563eb;font-size:10px;padding:2px 8px;border-radius:8px;font-weight:700">지표관리</span> KPI 세부 내역</h3>
+        <h3 style="display:flex;align-items:center;gap:6px"><span style="background:rgba(59,130,246,.12);color:#00897B;font-size:10px;padding:2px 8px;border-radius:8px;font-weight:700">지표관리</span> KPI 세부 내역</h3>
         <div id="deepKpi"></div>
       </div>
       <div class="dp">
@@ -304,7 +304,7 @@ thead th.th-fix{background:#f8fafc;color:var(--sub);font-size:11px;font-weight:6
     </div>
     <div class="dp" style="margin-top:16px">
       <h3 style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
-        <span style="background:rgba(59,130,246,.12);color:#2563eb;font-size:10px;padding:2px 8px;border-radius:8px;font-weight:700">KPI</span>
+        <span style="background:rgba(59,130,246,.12);color:#00897B;font-size:10px;padding:2px 8px;border-radius:8px;font-weight:700">KPI</span>
         지표별 상세 분석 &amp; 마감 시뮬레이터
       </h3>
       <p style="font-size:11px;color:#94a3b8;margin-bottom:14px">만점 미달 지표의 슬라이더를 조정하면 예상 KPI 총점과 순위가 실시간으로 계산됩니다.</p>
@@ -335,7 +335,7 @@ const D = [{"이름":"김민석","담당":"수도권영업담당","팀":"수도�
 const CUR_MONTH = (D.flatMap(m=>(m.history||[]).map(h=>h.date)).filter(d=>d!=='가마감').sort().reverse()[0]||'0101').slice(0,2).replace(/^0/,'');
 const AVG = {KPI:61.0, 판매달성률:90.1, 총합계:774535, KPI지급:271500, 판매지급:196071, 전략지급:100875, 추가합계:172250, 신규점:84.2};
 const MAX = {KPI:76.9, 총합계:1514680};
-const DEPT_COLORS = {'수도권영업담당':'#3b82f6','부산영업담당':'#10b981','대구영업담당':'#ef4444','서부영업담당':'#f59e0b','중부영업담당':'#8b5cf6'};
+const DEPT_COLORS = {'수도권영업담당':'#14B8A6','부산영업담당':'#10b981','대구영업담당':'#ef4444','서부영업담당':'#f59e0b','중부영업담당':'#8b5cf6'};
 const TEAM_ORDER = {
   '수도권영업담당':['수도권1도매팀','수도권2도매팀','강원도매팀'],
   '부산영업담당':['부산도매팀'],
@@ -347,7 +347,7 @@ const TEAM_ORDER = {
 const fmt = n => n==null?'-':n.toLocaleString()+'원';
 const fmtn = n => n==null?'-':n.toLocaleString();
 const pct = v => v==null?'-':v.toFixed(1)+'%';
-const kc = s => s>=90?'#10b981':s>=75?'#3b82f6':s>=60?'#f59e0b':'#ef4444';
+const kc = s => s>=90?'#10b981':s>=75?'#14B8A6':s>=60?'#f59e0b':'#ef4444';
 const rk = n => n===1?'🥇1위':n===2?'🥈2위':n===3?'🥉3위':n+'위';
 
 let selMktr=null, deepRadarInst=null, perfRadarInst=null, posMapChartInst=null;
@@ -448,11 +448,11 @@ function RT(){
     const tShort=m.팀.replace('도매팀','').replace('팀','');
     const pShort=m.파트.replace('도매PT','PT');
     const 전사=m.T전사우수>0?`<span style="background:rgba(251,191,36,.2);color:#b45309;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700">🥇+${m.T전사우수.toLocaleString()}원</span>`:`<span style="color:#d1d5db;font-size:11px">-</span>`;
-    const 담당=m.U담당우수>0?`<span style="background:rgba(59,130,246,.12);color:#2563eb;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700">🎖+${m.U담당우수.toLocaleString()}원</span>`:`<span style="color:#d1d5db;font-size:11px">-</span>`;
+    const 담당=m.U담당우수>0?`<span style="background:rgba(59,130,246,.12);color:#00897B;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700">🎖+${m.U담당우수.toLocaleString()}원</span>`:`<span style="color:#d1d5db;font-size:11px">-</span>`;
     const dc=DEPT_COLORS[m.담당]||'#94a3b8';
     return `<tr>
       <td><strong>${rk(m.전사금액순위)}</strong></td>
-      <td class="tdl"><strong style="color:#2563eb;cursor:pointer" onclick="proceedSelectMktr('${m.이름}')">${m.이름}</strong></td>
+      <td class="tdl"><strong style="color:#00897B;cursor:pointer" onclick="proceedSelectMktr('${m.이름}')">${m.이름}</strong></td>
       <td style="font-size:11px"><span style="padding:2px 7px;border-radius:8px;background:${dc}18;color:${dc};font-weight:600">${m.담당.replace('영업담당','')}</span></td>
       <td style="font-size:11px">${tShort}</td>
       <td style="font-size:11px">${pShort}</td>
@@ -580,8 +580,8 @@ function renderDeepHero(m){
     <div class="deep-hero-right">
       <div class="ds-card"><div class="ds-lbl">총 인센티브</div><div class="ds-val" style="color:${dc};font-size:17px">${fmt(m.총합계)}</div><div class="ds-sub">전사평균 ${m.총합계>=AVG.총합계?'+':''}${fmt(m.총합계-Math.round(AVG.총합계))}</div></div>
       <div class="ds-card"><div class="ds-lbl">KPI 점수</div><div class="ds-val" style="color:${kcol}">${m.KPI전사.toFixed(1)}</div><div class="ds-sub">전사 ${m.KPI전사순위}위</div></div>
-      <div class="ds-card"><div class="ds-lbl">총판매 목표달성률</div><div class="ds-val" style="color:${m.판매달성률>=100?'#10b981':m.판매달성률>=70?'#3b82f6':'#ef4444'}">${pct(m.판매달성률)}</div><div class="ds-sub">매출달성률 ${pct(m.매출달성률||0)}</div></div>
-      <div class="ds-card"><div class="ds-lbl">무선가동 목표달성률</div><div class="ds-val" style="color:${m.가동달성률>=100?'#10b981':m.가동달성률>=70?'#3b82f6':'#ef4444'}">${pct(m.가동달성률)}</div><div class="ds-sub">매출달성률 ${pct(m.매출달성률||0)}</div></div>
+      <div class="ds-card"><div class="ds-lbl">총판매 목표달성률</div><div class="ds-val" style="color:${m.판매달성률>=100?'#10b981':m.판매달성률>=70?'#14B8A6':'#ef4444'}">${pct(m.판매달성률)}</div><div class="ds-sub">매출달성률 ${pct(m.매출달성률||0)}</div></div>
+      <div class="ds-card"><div class="ds-lbl">무선가동 목표달성률</div><div class="ds-val" style="color:${m.가동달성률>=100?'#10b981':m.가동달성률>=70?'#14B8A6':'#ef4444'}">${pct(m.가동달성률)}</div><div class="ds-sub">매출달성률 ${pct(m.매출달성률||0)}</div></div>
     </div>`;
 }
 
@@ -589,7 +589,7 @@ function renderDeepHero(m){
 function renderDeepInsight(m){
   const vs=(val,avg)=>{const d=Math.round(val-avg);const pos=d>=0;return `<span class="is-cmp" style="color:${pos?'#10b981':'#ef4444'}">${pos?'▲':'▼'} 전사평균 ${pos?'+':''}${fmt(d)}</span>`;};
   document.getElementById('deepInsight').innerHTML=`
-    <div class="is-card" style="border-top-color:#3b82f6"><div class="is-lbl">지표관리 지급액</div><div class="is-val" style="color:#3b82f6">${fmt(m.지표관리보정후||m.지표지급금액)}</div>${vs(m.지표관리보정후||m.지표지급금액,AVG.KPI지급)}</div>
+    <div class="is-card" style="border-top-color:#14B8A6"><div class="is-lbl">지표관리 지급액</div><div class="is-val" style="color:#14B8A6">${fmt(m.지표관리보정후||m.지표지급금액)}</div>${vs(m.지표관리보정후||m.지표지급금액,AVG.KPI지급)}</div>
     <div class="is-card" style="border-top-color:#10b981"><div class="is-lbl">판매성장 지급액</div><div class="is-val" style="color:#10b981">${fmt(m.판매성장보정후||m.판매지급금액)}</div>${vs(m.판매성장보정후||m.판매지급금액,AVG.판매지급)}</div>
     <div class="is-card" style="border-top-color:#f59e0b"><div class="is-lbl">전략과제 지급액</div><div class="is-val" style="color:#f59e0b">${fmt(m.전략합산)}</div>${vs(m.전략합산,AVG.전략지급)}</div>
     <div class="is-card" style="border-top-color:#8b5cf6"><div class="is-lbl">추가 프로모션</div><div class="is-val" style="color:#8b5cf6">${fmt(m.추가합계)}</div>${vs(m.추가합계,AVG.추가합계)}</div>`;
@@ -626,7 +626,7 @@ function renderDeepRadar(m){
   });
   deepRadarInst=new Chart(document.getElementById('deepRadarChart'),{
     type:'radar',
-    data:{labels:KPI_LABELS,datasets:[{label:m.이름,data:values,borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.15)',pointBackgroundColor:values.map(v=>v>=90?'#10b981':v>=60?'#f59e0b':'#ef4444'),pointRadius:3,borderWidth:2}]},
+    data:{labels:KPI_LABELS,datasets:[{label:m.이름,data:values,borderColor:'#14B8A6',backgroundColor:'rgba(59,130,246,0.15)',pointBackgroundColor:values.map(v=>v>=90?'#10b981':v>=60?'#f59e0b':'#ef4444'),pointRadius:3,borderWidth:2}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{r:{min:0,max:150,ticks:{stepSize:50,font:{size:9}},pointLabels:{font:{size:9}}}}}
   });
 }
@@ -640,7 +640,7 @@ function renderDeepKeyInsight(m){
     const first=hist[0],last=hist[hist.length-1];
     const kpiDelta=+(last.kpi-first.kpi).toFixed(1);
     const rankDelta=first.rank-last.rank;
-    let color='#3b82f6',icon='📈',msg='';
+    let color='#14B8A6',icon='📈',msg='';
     if(kpiDelta>0){color='#10b981';icon='📈';msg=`${DL(first)} KPI <strong>${first.kpi.toFixed(1)}점</strong>→<strong>${last.kpi.toFixed(1)}점</strong> (+${kpiDelta}점), 순위 ${rankDelta>=0?'▲'+rankDelta+'위 상승':'▼'+Math.abs(rankDelta)+'위 하락'}.`;}
     else if(kpiDelta<0){color='#f59e0b';icon='⚠️';msg=`${DL(first)} KPI <strong>${first.kpi.toFixed(1)}점</strong>→<strong>${last.kpi.toFixed(1)}점</strong> (${kpiDelta}점), 순위 ${rankDelta>=0?'▲'+rankDelta+'위 상승':'변동 없음'}.`;}
     else{msg=`KPI <strong>${last.kpi.toFixed(1)}점</strong> 유지, 순위 ${last.rank}위.`;}
@@ -649,7 +649,7 @@ function renderDeepKeyInsight(m){
   // 성과 분석
   const rankTop10=m.전사금액순위<=10;
   if(rankTop10) insights.push({color:'#10b981',icon:'🏆',tag:'종합 성과',msg:`전사 <strong>${m.전사금액순위}위</strong>, 총 인센 <strong>${fmt(m.총합계)}</strong>, 전사평균 대비 <strong>+${fmt(m.총합계-Math.round(AVG.총합계))}</strong>.`});
-  else insights.push({color:'#3b82f6',icon:'📊',tag:'종합 성과',msg:`전사 <strong>${m.전사금액순위}위</strong> (24명 중), 담당 <strong>${m.KPI담당순위}위</strong>. 총 인센 <strong>${fmt(m.총합계)}</strong>.`});
+  else insights.push({color:'#14B8A6',icon:'📊',tag:'종합 성과',msg:`전사 <strong>${m.전사금액순위}위</strong> (24명 중), 담당 <strong>${m.KPI담당순위}위</strong>. 총 인센 <strong>${fmt(m.총합계)}</strong>.`});
   // 판매
   const sc=m.판매달성률>=100?{color:'#10b981',icon:'✅',msg:`총판매 달성률 <strong>${pct(m.판매달성률)}</strong> — 목표 초과 달성.`}:{color:'#f59e0b',icon:'⚠️',msg:`총판매 달성률 <strong>${pct(m.판매달성률)}</strong> — 목표 대비 ${(100-m.판매달성률).toFixed(1)}%p 미달.`};
   insights.push({...sc,tag:'판매 달성'});
@@ -666,14 +666,14 @@ function renderDeepTrend(m){
   const DL=h=>`${h.date.slice(0,2).replace(/^0/,'')}/${h.date.slice(2)}`;
   const labels=hist.map(DL);
   const kpiVals=hist.map(h=>h.kpi), rankVals=hist.map(h=>h.rank);
-  const dc=DEPT_COLORS[m.담당]||'#3b82f6';
+  const dc=DEPT_COLORS[m.담당]||'#14B8A6';
   const isSingle=kpiVals.length===1;
   const pendTxt=isSingle?' <span style="font-size:10px;color:#f59e0b">(데이터 누적 중)</span>':'';
   const kpiChg=isSingle?'':`→ <strong>${kpiVals[kpiVals.length-1].toFixed(1)}점</strong> (${(kpiVals[kpiVals.length-1]-kpiVals[0]>=0?'+':'')+(kpiVals[kpiVals.length-1]-kpiVals[0]).toFixed(1)}점)`;
   el.innerHTML=`<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px"><div style="font-size:12px;font-weight:600;color:var(--sub);margin-bottom:12px">📅 ${CUR_MONTH}월 경과별 추이${pendTxt} <span style="font-size:10px;font-weight:400;color:var(--mute)">KPI: ${kpiVals[0].toFixed(1)}점 ${kpiChg}</span></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:14px"><div style="position:relative;height:130px"><canvas id="trendKpiChart"></canvas></div><div style="position:relative;height:130px"><canvas id="trendRankChart"></canvas></div></div></div>`;
   trendChartKpi=new Chart(document.getElementById('trendKpiChart'),{type:'line',data:{labels,datasets:[{label:'KPI 점수',data:kpiVals,borderColor:dc,backgroundColor:dc+'22',borderWidth:isSingle?0:2.5,pointRadius:isSingle?8:4,pointBackgroundColor:dc,tension:0.3,fill:true},{label:'전사평균',data:Array(labels.length).fill(AVG.KPI),borderColor:'#94a3b8',borderDash:[4,3],borderWidth:1.5,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:false,ticks:{font:{size:9},callback:v=>v+'점'}},x:{ticks:{font:{size:9}},grid:{display:false}}}}});
   const maxR=Math.max(...rankVals);
-  trendChartRank=new Chart(document.getElementById('trendRankChart'),{type:'line',data:{labels,datasets:[{label:'순위',data:rankVals.map(v=>maxR+1-v),borderColor:'#f59e0b',backgroundColor:'rgba(245,158,11,.15)',borderWidth:isSingle?0:2.5,pointRadius:isSingle?8:5,pointBackgroundColor:rankVals.map(v=>v<=10?'#10b981':v<=30?'#3b82f6':'#f59e0b'),pointBorderColor:'#fff',pointBorderWidth:1.5,tension:0.3,fill:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'전사 순위: '+(maxR+1-c.parsed.y)+'위'}}},scales:{y:{beginAtZero:false,min:0,ticks:{font:{size:9},callback:v=>{const r=maxR+1-v;return r>0?r+'위':''}}},x:{ticks:{font:{size:9}},grid:{display:false}}}}});
+  trendChartRank=new Chart(document.getElementById('trendRankChart'),{type:'line',data:{labels,datasets:[{label:'순위',data:rankVals.map(v=>maxR+1-v),borderColor:'#f59e0b',backgroundColor:'rgba(245,158,11,.15)',borderWidth:isSingle?0:2.5,pointRadius:isSingle?8:5,pointBackgroundColor:rankVals.map(v=>v<=10?'#10b981':v<=30?'#14B8A6':'#f59e0b'),pointBorderColor:'#fff',pointBorderWidth:1.5,tension:0.3,fill:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'전사 순위: '+(maxR+1-c.parsed.y)+'위'}}},scales:{y:{beginAtZero:false,min:0,ticks:{font:{size:9},callback:v=>{const r=maxR+1-v;return r>0?r+'위':''}}},x:{ticks:{font:{size:9}},grid:{display:false}}}}});
 }
 
 // ─── 성과보상 레이더 + 프로그바 ───
@@ -681,7 +681,7 @@ function renderDeepProgbars(m){
   if(perfRadarInst){perfRadarInst.destroy();perfRadarInst=null;}
   const total=m.총합계||1;
   const items=[
-    {label:'지표관리',val:m.지표지급금액,avg:AVG.KPI지급,color:'#3b82f6'},
+    {label:'지표관리',val:m.지표지급금액,avg:AVG.KPI지급,color:'#14B8A6'},
     {label:'판매성장',val:m.판매지급금액,avg:AVG.판매지급,color:'#10b981'},
     {label:'전략과제',val:m.전략합산,avg:AVG.전략지급,color:'#f59e0b'},
     {label:'추가프로모션',val:m.추가합계,avg:AVG.추가합계,color:'#8b5cf6'},
@@ -700,13 +700,13 @@ function renderDeepProgbars(m){
   }).join('');
   const myVals=items.map(it=>it.val/total*100);
   const avgVals=items.map(it=>it.avg/AVG.총합계*100);
-  const dc=DEPT_COLORS[m.담당]||'#3b82f6';
+  const dc=DEPT_COLORS[m.담당]||'#14B8A6';
   perfRadarInst=new Chart(document.getElementById('deepRadar'),{type:'radar',data:{labels:['지표관리','판매성장','전략과제','추가프로모션'],datasets:[{label:m.이름,data:myVals,borderColor:dc,backgroundColor:dc+'33',borderWidth:2,pointBackgroundColor:dc,pointRadius:4},{label:'전사평균',data:avgVals,borderColor:'#94a3b8',backgroundColor:'rgba(148,163,184,.12)',borderWidth:1.5,borderDash:[4,3],pointBackgroundColor:'#94a3b8',pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11},boxWidth:10,padding:10}}},scales:{r:{min:0,max:60,ticks:{font:{size:9},stepSize:15,callback:v=>v+'%'}}}}});
 }
 
 // ─── 지표관리 KPI 상세 ───
 function renderDeepKpi(m){
-  const kc2=v=>v>=90?'#10b981':v>=75?'#3b82f6':v>=60?'#f59e0b':'#ef4444';
+  const kc2=v=>v>=90?'#10b981':v>=75?'#14B8A6':v>=60?'#f59e0b':'#ef4444';
   // 변화관리 점수 — kpi_detail에서 합산 (KPI변화관리 필드가 0이므로 직접 계산)
   const CHG_NAMES=['(마역강) 변화관리 대상점 방문','(마역강) 변화관리 합산 회복률',
                    '(마역강) 마케터 소통 Survey','파트장 방문 활동'];
@@ -716,7 +716,7 @@ function renderDeepKpi(m){
   const 판매과정합 = (m.판매지표점수||0)+(m.과정지표점수||0);
   // 미니카드 6개 (3열×2행): 판매 / 과정 / 변화관리 / 가점 / KPI전사 / KPI담당
   const maxItems=[
-    {label:'판매지표',  val:m.판매지표점수,  max:60,  color:'#3b82f6'},
+    {label:'판매지표',  val:m.판매지표점수,  max:60,  color:'#14B8A6'},
     {label:'과정지표',  val:m.과정지표점수,  max:40,  color:'#6366f1'},
     {label:'변화관리',  val:변화관리점수,     max:16,  color:'#8b5cf6'},
     {label:'가점과제',  val:m.가점과제점수,  max:5,   color:'#a78bfa'},
@@ -727,7 +727,7 @@ function renderDeepKpi(m){
     <div style="display:flex;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #f1f5f9">
       <div>
         <div style="font-size:10px;color:#94a3b8">지표관리 지급액</div>
-        <div style="font-size:18px;font-weight:700;color:#3b82f6">${fmt(m.지표지급금액)}</div>
+        <div style="font-size:18px;font-weight:700;color:#14B8A6">${fmt(m.지표지급금액)}</div>
         <div style="font-size:10px;color:#94a3b8">전사평균 <span style="font-weight:600;color:${m.지표지급금액>=AVG.KPI지급?'#10b981':'#ef4444'}">${m.지표지급금액>=AVG.KPI지급?'+':''}${fmt(Math.round(m.지표지급금액-AVG.KPI지급))}</span></div>
       </div>
       <div style="text-align:right">
@@ -738,7 +738,7 @@ function renderDeepKpi(m){
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
       <div style="background:#f8fafc;border-radius:8px;padding:9px 10px">
         <div style="font-size:10px;color:#94a3b8;margin-bottom:2px">조견금액 (판매·과정)</div>
-        <div style="font-size:17px;font-weight:700;color:#2563eb">${fmt(m.조견금액판매)}</div>
+        <div style="font-size:17px;font-weight:700;color:#00897B">${fmt(m.조견금액판매)}</div>
         <div style="font-size:10px;color:#94a3b8;margin-top:2px">전사평균 ${fmt(Math.round(AVG.KPI지급))}</div>
       </div>
       <div style="background:#f8fafc;border-radius:8px;padding:9px 10px">
@@ -776,9 +776,9 @@ function renderDeepKpi(m){
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
       <div style="background:#f8fafc;border-radius:8px;padding:9px 10px">
         <div style="font-size:10px;color:#94a3b8;margin-bottom:2px">판매+과정 점수</div>
-        <div style="font-size:18px;font-weight:700;color:#3b82f6">${판매과정합.toFixed(1)}점</div>
+        <div style="font-size:18px;font-weight:700;color:#14B8A6">${판매과정합.toFixed(1)}점</div>
         <div style="margin-top:4px;height:5px;background:#f1f5f9;border-radius:3px;overflow:hidden">
-          <div style="height:100%;background:#3b82f6;border-radius:3px;width:${Math.min(100,판매과정합/74*100).toFixed(1)}%"></div>
+          <div style="height:100%;background:#14B8A6;border-radius:3px;width:${Math.min(100,판매과정합/74*100).toFixed(1)}%"></div>
         </div>
         <div style="font-size:10px;color:#94a3b8;margin-top:3px">배점 최대 74점 (판매44+과정30)</div>
       </div>
@@ -798,13 +798,13 @@ const SALE_MATRIX=[[0,0,140000,190000],[0,110000,160000,210000],[80000,130000,18
 const SALE_ROW_LABELS=['80%↓','80~90%','90~100%','100~110%','110~120%','120%↑'];
 const SALE_COL_LABELS=['90%↓','90~100%','100~110%','110%↑'];
 function renderDeepSale(m){
-  const sc=m.판매달성률>=100?'#10b981':m.판매달성률>=70?'#3b82f6':'#ef4444';
-  const gc=m.가동달성률>=100?'#10b981':m.가동달성률>=70?'#3b82f6':'#ef4444';
+  const sc=m.판매달성률>=100?'#10b981':m.판매달성률>=70?'#14B8A6':'#ef4444';
+  const gc=m.가동달성률>=100?'#10b981':m.가동달성률>=70?'#14B8A6':'#ef4444';
   const r=m.판매달성률<80?0:m.판매달성률<90?1:m.판매달성률<100?2:m.판매달성률<110?3:m.판매달성률<120?4:5;
   const c=m.가동달성률<90?0:m.가동달성률<100?1:m.가동달성률<110?2:3;
   const 기준액=SALE_MATRIX[r][c];
-  let matHtml=`<div style="overflow-x:auto;margin-top:4px"><table style="width:100%;border-collapse:collapse;font-size:10px"><thead><tr><th style="background:#f1f5f9;padding:4px 6px;border:1px solid #e2e8f0;font-weight:600;color:#64748b;white-space:nowrap">판매↓/가동→</th>${SALE_COL_LABELS.map((cl,ci)=>`<th style="background:#f1f5f9;padding:4px 6px;border:1px solid #e2e8f0;font-weight:600;color:${ci===c?'#2563eb':'#64748b'};white-space:nowrap${ci===c?';text-decoration:underline':''}">${cl}</th>`).join('')}</tr></thead><tbody>`;
-  SALE_MATRIX.forEach((row,ri)=>{matHtml+=`<tr><td style="background:#f1f5f9;padding:4px 6px;border:1px solid #e2e8f0;font-weight:600;color:${ri===r?'#2563eb':'#64748b'};white-space:nowrap${ri===r?';text-decoration:underline':''}">${SALE_ROW_LABELS[ri]}</td>${row.map((val,ci)=>{const isT=ri===r&&ci===c;return `<td style="background:${isT?'#dbeafe':(ri===r||ci===c)?'#eff6ff':(ri%2?'#fafafa':'#fff')};padding:4px 6px;border:${isT?'2px solid #3b82f6':'1px solid #e2e8f0'};text-align:center;color:${isT?'#1d4ed8':(ri===r||ci===c)?'#3b82f6':'#374151'};font-weight:${isT?'800':'400'};white-space:nowrap">${val.toLocaleString()}</td>`;}).join('')}</tr>`;});
+  let matHtml=`<div style="overflow-x:auto;margin-top:4px"><table style="width:100%;border-collapse:collapse;font-size:10px"><thead><tr><th style="background:#f1f5f9;padding:4px 6px;border:1px solid #e2e8f0;font-weight:600;color:#64748b;white-space:nowrap">판매↓/가동→</th>${SALE_COL_LABELS.map((cl,ci)=>`<th style="background:#f1f5f9;padding:4px 6px;border:1px solid #e2e8f0;font-weight:600;color:${ci===c?'#00897B':'#64748b'};white-space:nowrap${ci===c?';text-decoration:underline':''}">${cl}</th>`).join('')}</tr></thead><tbody>`;
+  SALE_MATRIX.forEach((row,ri)=>{matHtml+=`<tr><td style="background:#f1f5f9;padding:4px 6px;border:1px solid #e2e8f0;font-weight:600;color:${ri===r?'#00897B':'#64748b'};white-space:nowrap${ri===r?';text-decoration:underline':''}">${SALE_ROW_LABELS[ri]}</td>${row.map((val,ci)=>{const isT=ri===r&&ci===c;return `<td style="background:${isT?'#dbeafe':(ri===r||ci===c)?'#eff6ff':(ri%2?'#fafafa':'#fff')};padding:4px 6px;border:${isT?'2px solid #14B8A6':'1px solid #e2e8f0'};text-align:center;color:${isT?'#00665E':(ri===r||ci===c)?'#14B8A6':'#374151'};font-weight:${isT?'800':'400'};white-space:nowrap">${val.toLocaleString()}</td>`;}).join('')}</tr>`;});
   matHtml+=`</tbody></table><div style="font-size:10px;color:#94a3b8;margin-top:4px">※ Matrix 기준액(원)·음영:해당구간</div></div>`;
   document.getElementById('deepSale').innerHTML=`
     <div style="display:flex;justify-content:space-between;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #f1f5f9">
@@ -816,8 +816,8 @@ function renderDeepSale(m){
       <div style="background:#f8fafc;border-radius:8px;padding:9px 10px"><div style="font-size:10px;color:#94a3b8;margin-bottom:2px">무선가동 목표달성률</div><div style="font-size:22px;font-weight:700;color:${gc}">${pct(m.가동달성률)}</div><div style="margin-top:5px;height:5px;background:#f1f5f9;border-radius:3px;overflow:hidden"><div style="height:100%;background:${gc};border-radius:3px;width:${Math.min(100,m.가동달성률).toFixed(1)}%"></div></div></div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
-      <div style="background:#f8fafc;border-radius:8px;padding:9px 10px"><div style="font-size:10px;color:#94a3b8;margin-bottom:2px">매출 목표달성률 (ARPU)</div><div style="font-size:22px;font-weight:700;color:${m.매출달성률>=100?'#10b981':m.매출달성률>=90?'#3b82f6':'#f59e0b'}">${pct(m.매출달성률||0)}</div></div>
-      <div style="background:#f8fafc;border-radius:8px;padding:9px 10px"><div style="font-size:10px;color:#94a3b8;margin-bottom:2px">생산성별 지급 기준액</div><div style="font-size:18px;font-weight:700;color:#3b82f6">${fmt(기준액)}</div><div style="font-size:10px;color:#94a3b8;margin-top:2px">구간 (${SALE_ROW_LABELS[r]}·${SALE_COL_LABELS[c]})</div></div>
+      <div style="background:#f8fafc;border-radius:8px;padding:9px 10px"><div style="font-size:10px;color:#94a3b8;margin-bottom:2px">매출 목표달성률 (ARPU)</div><div style="font-size:22px;font-weight:700;color:${m.매출달성률>=100?'#10b981':m.매출달성률>=90?'#14B8A6':'#f59e0b'}">${pct(m.매출달성률||0)}</div></div>
+      <div style="background:#f8fafc;border-radius:8px;padding:9px 10px"><div style="font-size:10px;color:#94a3b8;margin-bottom:2px">생산성별 지급 기준액</div><div style="font-size:18px;font-weight:700;color:#14B8A6">${fmt(기준액)}</div><div style="font-size:10px;color:#94a3b8;margin-top:2px">구간 (${SALE_ROW_LABELS[r]}·${SALE_COL_LABELS[c]})</div></div>
     </div>
     <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:4px">📊 판매성장 기준금액 Matrix (원·판매↓/가동→)</div>
     ${matHtml}`;
@@ -825,7 +825,7 @@ function renderDeepSale(m){
 
 // ─── 전략과제 ───
 function renderDeepStrat(m){
-  const mc=m.MVNO달성률>=100?'#10b981':m.MVNO달성률>=75?'#3b82f6':'#f59e0b';
+  const mc=m.MVNO달성률>=100?'#10b981':m.MVNO달성률>=75?'#14B8A6':'#f59e0b';
   document.getElementById('deepStrat').innerHTML=`
     <div style="display:flex;justify-content:space-between;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #f1f5f9">
       <div><div style="font-size:10px;color:#94a3b8">전략과제 지급액</div><div style="font-size:18px;font-weight:700;color:#f59e0b">${fmt(m.전략합산)}</div></div>
@@ -859,7 +859,7 @@ function renderDeepPromo(m){
 
 // ─── 시뮬레이터 ───
 let simAdjustments={};
-const KPI_CAT_COLORS={'총 판매':'#3b82f6','010':'#6366f1','MNO MNP':'#8b5cf6','MVNO':'#10b981','ARPU':'#f59e0b','IP17 지원금 비중':'#f59e0b','유지 ARPU':'#f59e0b','유선':'#14b8a6','마이스마트콜3':'#ec4899','TAC+':'#6366f1','외곽상권 실적':'#f97316','비용 집행률':'#64748b','RM관리':'#64748b','(무선) 인프라 가동':'#3b82f6','(유선) 인프라 가동':'#14b8a6','MVNO 가동':'#10b981','(무선) 연속 가동점':'#60a5fa','신규점 개설&가동':'#f59e0b','T-Form 사용율':'#ec4899','추가지원금 선약 입력률':'#ec4899','(마역강) 변화관리 대상점 방문':'#a78bfa','(마역강) 변화관리 합산 회복률':'#34d399','(마역강) 마케터 소통 Survey':'#0ea5e9','파트장 방문 활동':'#94a3b8','Flagship 판매':'#06b6d4'};
+const KPI_CAT_COLORS={'총 판매':'#14B8A6','010':'#6366f1','MNO MNP':'#8b5cf6','MVNO':'#10b981','ARPU':'#f59e0b','IP17 지원금 비중':'#f59e0b','유지 ARPU':'#f59e0b','유선':'#14b8a6','마이스마트콜3':'#ec4899','TAC+':'#6366f1','외곽상권 실적':'#f97316','비용 집행률':'#64748b','RM관리':'#64748b','(무선) 인프라 가동':'#14B8A6','(유선) 인프라 가동':'#14b8a6','MVNO 가동':'#10b981','(무선) 연속 가동점':'#60a5fa','신규점 개설&가동':'#f59e0b','T-Form 사용율':'#ec4899','추가지원금 선약 입력률':'#ec4899','(마역강) 변화관리 대상점 방문':'#a78bfa','(마역강) 변화관리 합산 회복률':'#34d399','(마역강) 마케터 소통 Survey':'#0ea5e9','파트장 방문 활동':'#94a3b8','Flagship 판매':'#06b6d4'};
 const KPI_CAT_GROUP={'총 판매':'판매','010':'판매','MNO MNP':'판매','MVNO':'판매','ARPU':'매출','IP17 지원금 비중':'매출','유지 ARPU':'매출','유선':'유선','마이스마트콜3':'부가','TAC+':'부가','외곽상권 실적':'관리','비용 집행률':'관리','RM관리':'관리','(무선) 인프라 가동':'과정','(유선) 인프라 가동':'과정','MVNO 가동':'과정','(무선) 연속 가동점':'과정','신규점 개설&가동':'과정','T-Form 사용율':'과정','추가지원금 선약 입력률':'과정','(마역강) 변화관리 대상점 방문':'변화관리','(마역강) 변화관리 합산 회복률':'변화관리','(마역강) 마케터 소통 Survey':'변화관리','파트장 방문 활동':'변화관리','Flagship 판매':'가점'};
 function buildKpiSimulator(m){
   const items=(m.kpi_detail||[]).filter(it=>(it.배점||0)>0&&(it.score||0)<it.배점);
@@ -871,7 +871,7 @@ function buildKpiSimulator(m){
   function update(){
     const newK=calcNew(),newR=calcRank(newK),diff=m.KPI전사순위-newR,delta=+(newK-curKpi).toFixed(2);
     const rc=diff>0?'#10b981':diff<0?'#ef4444':'#94a3b8';
-    const dc=DEPT_COLORS[m.담당]||'#3b82f6';
+    const dc=DEPT_COLORS[m.담당]||'#14B8A6';
     document.getElementById('simResult').innerHTML=`
       <div class="sim-card" style="border:1px solid ${dc}55"><div class="sc-lbl">예상 KPI 점수</div><div class="sc-val" style="color:${dc}">${newK.toFixed(2)}<span style="font-size:12px;color:#94a3b8">점</span></div><div class="sc-sub">현재 ${curKpi.toFixed(1)}점 → +${delta.toFixed(2)}점</div></div>
       <div class="sim-card" style="border:1px solid ${rc}55"><div class="sc-lbl">예상 KPI 순위</div><div class="sc-val" style="color:${rc}">${newR}위</div><div class="sc-sub" style="font-weight:700;color:${rc}">${diff>0?'▲'+diff+'위 상승':diff<0?'▼'+Math.abs(diff)+'위 하락':'변동 없음'}</div></div>
@@ -882,7 +882,7 @@ function buildKpiSimulator(m){
   if(!items.length){ctrl.innerHTML='<div style="text-align:center;padding:16px;color:#10b981;font-size:13px;font-weight:600">✅ 모든 배점 지표 만점 달성!</div>';update();return;}
   items.forEach(it=>{
     const gap=parseFloat((it.배점-(it.score||0)).toFixed(2));
-    const cc=KPI_CAT_COLORS[it.name]||'#3b82f6';
+    const cc=KPI_CAT_COLORS[it.name]||'#14B8A6';
     const grp=KPI_CAT_GROUP[it.name]||'';
     const row=document.createElement('div');
     row.className='sim-slider-row';
@@ -944,7 +944,7 @@ function renderDeepKpiDetail(m){
     const bae=kd.배점||0;
     totalScore+=s; totalBaejum+=bae;
     const barW=bae>0?Math.min(100,s/bae*100).toFixed(1):0;
-    const barC=bae>0&&s/bae>=0.9?'#10b981':bae>0&&s/bae>=0.6?'#3b82f6':bae>0&&s/bae>=0.3?'#f59e0b':'#ef4444';
+    const barC=bae>0&&s/bae>=0.9?'#10b981':bae>0&&s/bae>=0.6?'#14B8A6':bae>0&&s/bae>=0.3?'#f59e0b':'#ef4444';
     return `<tr>
       <td style="text-align:center"><span style="display:inline-block;padding:1px 7px;border-radius:8px;font-size:10px;font-weight:700;background:${cc}18;color:${cc}">${cat}</span></td>
       <td class="tdl" style="font-size:11px;font-weight:600">${kd.name}</td>
@@ -975,7 +975,7 @@ function renderDeepKpiDetail(m){
     <tbody>${rows}</tbody>
     <tfoot><tr style="background:#f0f4f8">
       <td colspan="7" style="padding:8px 10px;font-size:12px;font-weight:700;color:#1e293b">합 계</td>
-      <td style="padding:8px 10px;font-size:12px;font-weight:700;color:#2563eb">${totalScore.toFixed(1)}점 / ${totalBaejum}점</td>
+      <td style="padding:8px 10px;font-size:12px;font-weight:700;color:#00897B">${totalScore.toFixed(1)}점 / ${totalBaejum}점</td>
     </tr></tfoot>
   </table></div>`;
 }
@@ -1034,7 +1034,7 @@ function showTokenBox(token, saved) {
     ${statusMsg}
     <textarea readonly style="width:100%;height:70px;font-size:10px;padding:8px;border:1px solid #e2e8f0;border-radius:8px;resize:none;font-family:monospace;color:#94a3b8;" onclick="this.select()">${token}</textarea>
     <div style="display:flex;gap:8px;margin-top:12px;">
-      <button id="closeTokenBtn2" style="flex:1;background:#1e3a5f;color:#fff;border:none;padding:10px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;">확인</button>
+      <button id="closeTokenBtn2" style="flex:1;background:#00665E;color:#fff;border:none;padding:10px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;">확인</button>
     </div>`;
   overlay.appendChild(box);
   document.body.appendChild(overlay);
@@ -1102,7 +1102,7 @@ window.addEventListener('load', silentTokenRefresh);
 function initPushNotification() {
   if (!('serviceWorker' in navigator) || !('Notification' in window)) return;
   const btn = document.createElement('button');
-  btn.style.cssText = 'position:fixed;bottom:20px;right:20px;z-index:9999;background:#1e3a5f;color:#fff;border:none;padding:12px 18px;border-radius:24px;font-size:13px;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,.2);cursor:pointer;font-family:inherit;';
+  btn.style.cssText = 'position:fixed;bottom:20px;right:20px;z-index:9999;background:#00665E;color:#fff;border:none;padding:12px 18px;border-radius:24px;font-size:13px;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,.2);cursor:pointer;font-family:inherit;';
   if (Notification.permission === 'granted') {
     btn.textContent = '🔔 내 알림 토큰 확인';
     btn.onclick = fetchAndShowToken;
@@ -1133,7 +1133,7 @@ const PL_USER = {
 function initMessageButton() {
   const btn = document.createElement('button');
   btn.textContent = '✉️ 담당자에게 메시지';
-  btn.style.cssText = 'position:fixed;bottom:70px;right:20px;z-index:9999;background:#0f766e;color:#fff;border:none;padding:12px 18px;border-radius:24px;font-size:13px;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,.2);cursor:pointer;font-family:inherit;';
+  btn.style.cssText = 'position:fixed;bottom:70px;right:20px;z-index:9999;background:#00665E;color:#fff;border:none;padding:12px 18px;border-radius:24px;font-size:13px;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,.2);cursor:pointer;font-family:inherit;';
   btn.onclick = openMessageModal;
   document.body.appendChild(btn);
 }
@@ -1159,7 +1159,7 @@ function openMessageModal() {
 
     <div style="display:flex;gap:8px;">
       <button id="msgCancelBtn2" style="flex:1;background:#e2e8f0;color:#1e293b;border:none;padding:12px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;">취소</button>
-      <button id="msgSubmitBtn2" style="flex:1;background:#0f766e;color:#fff;border:none;padding:12px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;">전송</button>
+      <button id="msgSubmitBtn2" style="flex:1;background:#00665E;color:#fff;border:none;padding:12px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;">전송</button>
     </div>
     <div id="msgStatus2" style="font-size:12px;text-align:center;margin-top:10px;min-height:16px;"></div>
   `;
@@ -1260,7 +1260,7 @@ async function openMyMessagesModal() {
       return `
         <div style="border:1px solid #e2e8f0;border-radius:10px;padding:12px 14px;margin-bottom:8px;">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-            <span style="font-size:11px;font-weight:700;color:#2563eb;background:#eff6ff;padding:2px 8px;border-radius:6px;">${m.category}</span>
+            <span style="font-size:11px;font-weight:700;color:#00897B;background:#eff6ff;padding:2px 8px;border-radius:6px;">${m.category}</span>
             <span style="font-size:12px;font-weight:700;color:${color};">${m.status}</span>
           </div>
           <div style="font-size:13px;color:#334155;line-height:1.5;margin-bottom:6px;white-space:pre-wrap;">${m.content}</div>

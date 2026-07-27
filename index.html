@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SK 도매 성과보상 Dashboard</title>
+<title>PS&M 도매 성과보상 Mobile</title>
 
 <!-- PWA 설정 -->
 <link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#1e3a5f">
+<meta name="theme-color" content="#00665E">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -19,7 +19,7 @@
 body {
   font-family: 'Noto Sans KR', sans-serif;
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f1f3d 0%, #1e3a5f 50%, #2563eb 100%);
+  background: linear-gradient(135deg, #00332E 0%, #00665E 50%, #00897B 100%);
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   padding: 24px;
@@ -62,7 +62,7 @@ body {
 .pw-input:focus { border-color: #60a5fa; background: rgba(255,255,255,.18); }
 .pw-btn {
   width: 100%; padding: 14px;
-  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  background: linear-gradient(135deg, #00897B, #14B8A6);
   border: none; border-radius: 12px;
   color: #fff; font-size: 15px; font-weight: 700;
   font-family: 'Noto Sans KR', sans-serif;
@@ -89,7 +89,7 @@ body {
 <body>
 
 <div class="logo">📊</div>
-<div class="title">SK 도매 성과보상 Dashboard</div>
+<div class="title">PS&M 도매 성과보상 Mobile</div>
 <div class="sub">역할을 선택하고 비밀번호를 입력해주세요</div>
 
 <!-- 역할 선택 -->
@@ -97,12 +97,12 @@ body {
   <div class="role-card" id="cardMarketer" onclick="selectRole('marketer')">
     <div class="rc-icon">🏃</div>
     <div class="rc-label">마케터</div>
-    <div class="rc-sub">도매 마케터<br>성과보상 Dashboard</div>
+    <div class="rc-sub">마케터<br>성과보상 Dashboard</div>
   </div>
   <div class="role-card" id="cardPartleader" onclick="selectRole('partleader')">
     <div class="rc-icon">👔</div>
     <div class="rc-label">파트장</div>
-    <div class="rc-sub">파트장 KPI 및<br>성과보상 Dashboard</div>
+    <div class="rc-sub">파트장<br>성과보상 Dashboard</div>
   </div>
 </div>
 

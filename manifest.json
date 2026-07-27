@@ -1,13 +1,13 @@
 {
-  "name": "SK 도매 마케터 성과보상 Dashboard",
-  "short_name": "성과보상 Dashboard",
+  "name": "PS&M 도매 성과보상 Mobile",
+  "short_name": "도매 성과보상 Mobile",
   "description": "도매 채널 마케터 KPI 및 성과보상 현황 대시보드",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
   "background_color": "#f0f4f8",
-  "theme_color": "#1e3a5f",
+  "theme_color": "#00665E",
   "icons": [
     {
       "src": "icon-192.png",
