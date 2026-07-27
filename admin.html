@@ -193,7 +193,11 @@ function escapeHtml(str) {
 
 async function updateStatus(id, newStatus) {
   try {
-    await db.collection('messages').doc(id).update({ status: newStatus });
+    const update = { status: newStatus };
+    if (newStatus === '완료') {
+      update.notified = false; // 완료 처리 시 → 스케줄러가 알림 발송 후 true로 전환
+    }
+    await db.collection('messages').doc(id).update(update);
   } catch (e) {
     alert('상태 변경 실패: ' + e.message);
   }

@@ -1057,6 +1057,7 @@ async function saveTokenToFirestore(token) {
       token: token,
       role: APP_ROLE,
       deviceId: deviceId,
+      sabun: PL_USER.sabun,
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     });
     return true;
@@ -1208,6 +1209,68 @@ function openMessageModal() {
   };
 }
 window.addEventListener('load', initMessageButton);
+
+const STATUS_COLOR = { '접수':'#dc2626', '확인중':'#d97706', '완료':'#16a34a' };
+
+function initMyMessagesButton() {
+  const btn = document.createElement('button');
+  btn.textContent = '📋 내 문의 확인';
+  btn.style.cssText = 'position:fixed;bottom:120px;right:20px;z-index:9999;background:#475569;color:#fff;border:none;padding:12px 18px;border-radius:24px;font-size:13px;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,.2);cursor:pointer;font-family:inherit;';
+  btn.onclick = openMyMessagesModal;
+  document.body.appendChild(btn);
+}
+
+async function openMyMessagesModal() {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:10001;display:flex;align-items:center;justify-content:center;padding:20px;';
+  const box = document.createElement('div');
+  box.style.cssText = 'background:#fff;border-radius:14px;padding:22px;max-width:440px;width:100%;max-height:70vh;overflow-y:auto;font-family:inherit;';
+  box.innerHTML = `
+    <div style="font-size:16px;font-weight:700;margin-bottom:14px;color:#1e293b;display:flex;justify-content:space-between;align-items:center;">
+      <span>📋 내가 보낸 문의</span>
+      <button id="myMsgCloseBtn2" style="background:none;border:none;font-size:18px;cursor:pointer;color:#94a3b8;">×</button>
+    </div>
+    <div id="myMsgList2" style="font-size:13px;color:#64748b;">불러오는 중...</div>
+  `;
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+  box.querySelector('#myMsgCloseBtn2').onclick = () => overlay.remove();
+
+  const listEl = box.querySelector('#myMsgList2');
+
+  try {
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const snap = await db.collection('messages').where('sabun', '==', PL_USER.sabun).get();
+    let items = [];
+    snap.forEach(doc => items.push(doc.data()));
+    items.sort((a, b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
+
+    if (!items.length) {
+      listEl.innerHTML = '<div style="text-align:center;padding:30px 0;color:#94a3b8;">보낸 문의가 없습니다.</div>';
+      return;
+    }
+
+    listEl.innerHTML = items.map(m => {
+      const time = m.createdAt?.toDate ? m.createdAt.toDate().toLocaleString('ko-KR') : '';
+      const color = STATUS_COLOR[m.status] || '#64748b';
+      return `
+        <div style="border:1px solid #e2e8f0;border-radius:10px;padding:12px 14px;margin-bottom:8px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <span style="font-size:11px;font-weight:700;color:#2563eb;background:#eff6ff;padding:2px 8px;border-radius:6px;">${m.category}</span>
+            <span style="font-size:12px;font-weight:700;color:${color};">${m.status}</span>
+          </div>
+          <div style="font-size:13px;color:#334155;line-height:1.5;margin-bottom:6px;white-space:pre-wrap;">${m.content}</div>
+          <div style="font-size:11px;color:#94a3b8;">${time}</div>
+        </div>
+      `;
+    }).join('');
+  } catch (e) {
+    console.error('[내 메시지 조회 실패]', e);
+    listEl.innerHTML = '<div style="text-align:center;padding:30px 0;color:#dc2626;">불러오기에 실패했습니다.</div>';
+  }
+}
+window.addEventListener('load', initMyMessagesButton);
 </script>
 
 </body>
