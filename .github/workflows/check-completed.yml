@@ -1,0 +1,26 @@
+name: 완료 처리 메시지 알림 발송
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'   # 15분마다 자동 실행
+  workflow_dispatch:          # 수동 실행 버튼도 사용 가능
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 저장소 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Python 설치
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 패키지 설치
+        run: pip install PyJWT cryptography
+
+      - name: 완료 메시지 확인 및 알림 발송
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: python check_completed.py
