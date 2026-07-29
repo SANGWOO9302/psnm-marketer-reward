@@ -1,7 +1,7 @@
 // service-worker.js
 // PWA 오프라인 지원(캐싱) + FCM 푸시 알림 수신 통합
 
-const CACHE_NAME = "reward-dashboard-cache-v6";
+const CACHE_NAME = "reward-dashboard-cache-v7";
 const FILES_TO_CACHE = [
   "./index.html",
   "./marketer.html",
@@ -32,6 +32,10 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
+  // GET 요청만 캐싱 대상으로 처리 (Firestore/EmailJS 등 POST 요청은 캐싱 대상에서 제외)
+  if (event.request.method !== "GET") {
+    return; // 캐싱 로직을 타지 않고 브라우저 기본 동작(그대로 네트워크 요청)에 맡김
+  }
   event.respondWith(
     fetch(event.request)
       .then((response) => {
