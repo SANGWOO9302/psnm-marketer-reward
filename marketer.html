@@ -2120,7 +2120,7 @@ function initPushNotification() {
 window.addEventListener('load', initPushNotification);
 
 // ===== 담당자에게 메시지 남기기 =====
-const EMAILJS_SERVICE_ID  = "service_4ijkkip";
+const EMAILJS_SERVICE_ID  = "service_3knroi3";
 const EMAILJS_TEMPLATE_ID = "template_nou5vwo";
 const EMAILJS_PUBLIC_KEY  = "VH4hEwvzA3uo13tmt";
 
@@ -2195,7 +2195,11 @@ function openMessageModal() {
           role: APP_ROLE === 'marketer' ? '마케터' : '파트장',
           category: category,
           content: content
-        }, EMAILJS_PUBLIC_KEY).catch(err => console.error('[EmailJS] 발송 실패:', err));
+        }, EMAILJS_PUBLIC_KEY).then(() => {
+          console.log('[EmailJS] 발송 성공');
+        }).catch(err => {
+          console.error('[EmailJS] 발송 실패:', err?.status, err?.text || err);
+        });
       }
 
       statusEl.textContent = '전송 완료되었습니다.';
