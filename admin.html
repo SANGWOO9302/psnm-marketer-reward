@@ -48,6 +48,41 @@ body { font-family:'Noto Sans KR',sans-serif; background:#f0f4f8; color:#1e293b;
 
 .msg-card { background:#fff; border-radius:12px; padding:16px 18px; margin-bottom:10px; border:1px solid #e2e8f0; }
 .msg-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px; }
+
+/* 점3개 메뉴 */
+.menu-wrap { position:relative; }
+.menu-btn {
+  background:none; border:none; font-size:20px; color:#94a3b8; cursor:pointer;
+  padding:2px 8px; border-radius:6px; line-height:1;
+}
+.menu-btn:hover { background:#f1f5f9; }
+.menu-dropdown {
+  display:none; position:absolute; top:28px; right:0; z-index:100;
+  background:#fff; border:1px solid #e2e8f0; border-radius:10px;
+  box-shadow:0 4px 16px rgba(0,0,0,.12); min-width:110px; overflow:hidden;
+}
+.menu-dropdown.show { display:block; }
+.menu-item {
+  display:block; width:100%; text-align:left; padding:10px 14px;
+  background:none; border:none; font-size:13px; cursor:pointer; font-family:inherit;
+}
+.menu-item:hover { background:#f8fafc; }
+.menu-item.danger { color:#dc2626; }
+.menu-item.danger:hover { background:#fef2f2; }
+
+/* 삭제 확인 모달 */
+.confirm-overlay {
+  display:none; position:fixed; inset:0; background:rgba(0,0,0,.5);
+  z-index:1000; align-items:center; justify-content:center; padding:20px;
+}
+.confirm-overlay.show { display:flex; }
+.confirm-box { background:#fff; border-radius:14px; padding:22px; max-width:320px; width:100%; text-align:center; }
+.confirm-box .icon { font-size:36px; margin-bottom:10px; }
+.confirm-box .msg { font-size:14px; color:#334155; margin-bottom:20px; line-height:1.5; }
+.confirm-box .btns { display:flex; gap:8px; }
+.confirm-box button { flex:1; padding:11px; border-radius:8px; border:none; font-size:13px; font-weight:600; cursor:pointer; font-family:inherit; }
+.confirm-cancel { background:#e2e8f0; color:#1e293b; }
+.confirm-delete { background:#dc2626; color:#fff; }
 .msg-who { font-size:13px; font-weight:700; }
 .msg-meta { font-size:11px; color:#94a3b8; margin-top:2px; }
 .msg-cat { font-size:11px; font-weight:600; padding:2px 8px; border-radius:8px; background:#eff6ff; color:#00897B; display:inline-block; margin-bottom:8px; }
@@ -90,6 +125,18 @@ body { font-family:'Noto Sans KR',sans-serif; background:#f0f4f8; color:#1e293b;
     <button data-f="완료" onclick="setFilter('완료')">완료</button>
   </div>
   <div id="msgList"></div>
+</div>
+
+<!-- 삭제 확인 모달 -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <div class="icon">🗑</div>
+    <div class="msg">이 문의를 삭제하시겠습니까?<br><span style="color:#94a3b8;font-size:12px;">삭제 후에는 복구할 수 없습니다.</span></div>
+    <div class="btns">
+      <button class="confirm-cancel" onclick="closeConfirm()">취소</button>
+      <button class="confirm-delete" onclick="doDelete()">삭제</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -169,6 +216,12 @@ function renderMessages() {
           <div>
             <div class="msg-who">${m.name} <span style="color:#94a3b8;font-weight:400;">(${roleKo} · ${m.sabun})</span></div>
           </div>
+          <div class="menu-wrap">
+            <button class="menu-btn" onclick="toggleMenu(event, '${m.id}')">⋮</button>
+            <div class="menu-dropdown" id="menu-${m.id}">
+              <button class="menu-item danger" onclick="confirmDelete('${m.id}')">🗑 삭제</button>
+            </div>
+          </div>
         </div>
         <div class="msg-cat">${m.category}</div>
         <div class="msg-content">${escapeHtml(m.content)}</div>
@@ -200,6 +253,43 @@ async function updateStatus(id, newStatus) {
     await db.collection('messages').doc(id).update(update);
   } catch (e) {
     alert('상태 변경 실패: ' + e.message);
+  }
+}
+
+// ===== 점3개 메뉴 & 삭제 =====
+let pendingDeleteId = null;
+
+function toggleMenu(event, id) {
+  event.stopPropagation();
+  const dropdown = document.getElementById('menu-' + id);
+  const isOpen = dropdown.classList.contains('show');
+  document.querySelectorAll('.menu-dropdown.show').forEach(el => el.classList.remove('show'));
+  if (!isOpen) dropdown.classList.add('show');
+}
+
+document.addEventListener('click', () => {
+  document.querySelectorAll('.menu-dropdown.show').forEach(el => el.classList.remove('show'));
+});
+
+function confirmDelete(id) {
+  document.querySelectorAll('.menu-dropdown.show').forEach(el => el.classList.remove('show'));
+  pendingDeleteId = id;
+  document.getElementById('confirmOverlay').classList.add('show');
+}
+
+function closeConfirm() {
+  pendingDeleteId = null;
+  document.getElementById('confirmOverlay').classList.remove('show');
+}
+
+async function doDelete() {
+  if (!pendingDeleteId) return;
+  try {
+    await db.collection('messages').doc(pendingDeleteId).delete();
+    closeConfirm();
+  } catch (e) {
+    alert('삭제 실패: ' + e.message);
+    closeConfirm();
   }
 }
 </script>
